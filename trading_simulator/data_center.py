@@ -6,15 +6,14 @@ from os.path import exists
 
 class DataCenter:
 
-    def __init__(self, stocks, start=None, end=None, file_name="data_center"):
+    def __init__(self, stocks, start=None, end=None, file_path="./data/data_center.csv"):
         self.dfs = {}
-        self.load_data(stocks, start, end, file_name)
+        self.load_data(stocks, start, end, file_path)
 
-    def load_data(self, stocks, start, end, file_name):
-        path = "./data/" + file_name + ".csv"
-        if exists(path):
+    def load_data(self, stocks, start, end, file_path):
+        if exists(file_path):
             try:
-                crypto_df = pd.read_csv(path, index_col=["symbol", "timestamp"])
+                crypto_df = pd.read_csv(file_path, index_col=["symbol", "timestamp"])
                 crypto_df.index = crypto_df.index.set_levels(pd.to_datetime(crypto_df.index.levels[1]), level='timestamp')
                 for stock in stocks:
                     stock_df = crypto_df.loc[stock]
@@ -32,7 +31,7 @@ class DataCenter:
                 crypto_df = pd.DataFrame(bars.df)
                 crypto_df.index = crypto_df.index.set_levels(pd.to_datetime(crypto_df.index.levels[1]), level='timestamp')
                 crypto_df.pop("vwap")
-                crypto_df.to_csv(path)
+                crypto_df.to_csv(file_path)
         
         for stock in stocks:
             self.dfs[stock] = crypto_df.loc[stock]

@@ -5,7 +5,7 @@ import datetime as dt
 
 stocks = ["ETH/USD"]
 
-data_center = DataCenter(stocks, file_name="eth_usd_2022")
+data_center = DataCenter(stocks, file_path="./data/eth_usd_2022.csv")
 trader_count = 100
 starting_cash = 10000
 
