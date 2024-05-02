@@ -7,11 +7,7 @@ import pandas as pd
 class DataCenter:
     
     def __init__(self, stocks, start=None, end=None, file_path=None):
-        client = CryptoHistoricalDataClient()
-        request_params = CryptoBarsRequest(symbol_or_symbols=stocks,
-                                   timeframe=TimeFrame.Minute, 
-                                   start = start,
-                                   end = end)
+        
         self.dfs = {}
 
         if file_path:
@@ -22,16 +18,21 @@ class DataCenter:
                     stock_df = crypto_df.loc[stock]
                    
                     self.dfs[stock] = stock_df
+                print("Datacenter initalized!")
+                return
             except:
+                client = CryptoHistoricalDataClient()
+                request_params = CryptoBarsRequest(symbol_or_symbols=stocks,
+                                   timeframe=TimeFrame.Minute, 
+                                   start = start,
+                                   end = end)
+                bars = client.get_crypto_bars(request_params)
+                crypto_df = pd.DataFrame(bars.df)
+                crypto_df.index = crypto_df.index.set_levels(pd.to_datetime(crypto_df.index.levels[1]), level='timestamp')
+                crypto_df.pop("vwap")
+                crypto_df.to_csv(file_path)
                 print(file_path, "File does not exist.")
-            print("Datacenter initalized!")
-            return
-
-        bars = client.get_crypto_bars(request_params)
-        crypto_df = pd.DataFrame(bars.df)
-        crypto_df.index = crypto_df.index.set_levels(pd.to_datetime(crypto_df.index.levels[1]), level='timestamp')
-        crypto_df.pop("vwap")
-        crypto_df.to_csv("./data/data_center.csv")
+        
         for stock in stocks:
             self.dfs[stock] = crypto_df.loc[stock]
         print("Datacenter initalized!")
