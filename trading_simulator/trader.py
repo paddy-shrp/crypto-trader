@@ -1,5 +1,5 @@
 import numpy as np
-from trader_nn import TraderModel
+from trading_simulator.trader_nn import TraderModel
 
 class Trader:
 

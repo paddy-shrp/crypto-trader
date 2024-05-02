@@ -1,18 +1,20 @@
 from alpaca.data.historical import CryptoHistoricalDataClient
 from alpaca.data.requests import CryptoBarsRequest
 from alpaca.data.timeframe import TimeFrame
-import datetime as dt
 import pandas as pd
+from os.path import exists
 
 class DataCenter:
-    
-    def __init__(self, stocks, start=None, end=None, file_path=None):
-        
-        self.dfs = {}
 
-        if file_path:
+    def __init__(self, stocks, start=None, end=None, file_name="data_center"):
+        self.dfs = {}
+        self.load_data(stocks, start, end, file_name)
+
+    def load_data(self, stocks, start, end, file_name):
+        path = "./data/" + file_name + ".csv"
+        if exists(path):
             try:
-                crypto_df = pd.read_csv(file_path, index_col=["symbol", "timestamp"])
+                crypto_df = pd.read_csv(path, index_col=["symbol", "timestamp"])
                 crypto_df.index = crypto_df.index.set_levels(pd.to_datetime(crypto_df.index.levels[1]), level='timestamp')
                 for stock in stocks:
                     stock_df = crypto_df.loc[stock]
@@ -30,8 +32,7 @@ class DataCenter:
                 crypto_df = pd.DataFrame(bars.df)
                 crypto_df.index = crypto_df.index.set_levels(pd.to_datetime(crypto_df.index.levels[1]), level='timestamp')
                 crypto_df.pop("vwap")
-                crypto_df.to_csv(file_path)
-                print(file_path, "File does not exist.")
+                crypto_df.to_csv(path)
         
         for stock in stocks:
             self.dfs[stock] = crypto_df.loc[stock]

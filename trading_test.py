@@ -1,11 +1,11 @@
-from data_center import DataCenter
-from objects.broker import Broker
-from objects.trader import Trader
+from trading_simulator.data_center import DataCenter
+from trading_simulator.broker import Broker
+from trading_simulator.trader import Trader
 import datetime as dt
 
 stocks = ["ETH/USD"]
 
-data_center = DataCenter(stocks, file_path="./data/eth_usd_2022.csv")
+data_center = DataCenter(stocks, file_name="eth_usd_2022")
 trader_count = 100
 starting_cash = 10000
 

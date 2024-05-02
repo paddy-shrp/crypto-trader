@@ -1,13 +1,8 @@
 import datetime as dt
 import numpy as np
 import tensorflow as tf
-import matplotlib.pyplot as plt
-from data_center import DataCenter
-from objects.broker import Broker
-from objects.trader import Trader
-import time
-
-# survival of the fittest
+from trading_simulator.broker import Broker
+from trading_simulator.trader import Trader
 
 class Simulator:
     def __init__(self, start_date, stop_date, step_time:dt.timedelta, data_center, stocks, trader_count, starting_cash):

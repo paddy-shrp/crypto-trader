@@ -1,10 +1,9 @@
-import pandas as pd
 import numpy as np
-from data_center import DataCenter
+from trading_simulator.data_center import DataCenter
 import datetime as dt
 import matplotlib.pyplot as plt
 
-data_center = DataCenter(["ETH/USD"], file_path="./data/eth_usd_2022.csv")
+data_center = DataCenter(["ETH/USD"], file_name="eth_usd_2022")
 
 data = data_center.get_history_by_frequency(dt.datetime.now(), dt.timedelta(weeks=100), "15min", "ETH/USD").values[:, 0]
 
